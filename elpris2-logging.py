@@ -35,8 +35,8 @@ def hent_stroem_priser(region):
         url = "https://api.energidataservice.dk/dataset/Elspotprices"
         now = datetime.now(pytz.timezone('Europe/Copenhagen'))
         params = {
-            'start': now.strftime('%Y-%m-%dT%H:%M'),
-            'end': (now + timedelta(days=1, hours=1)).strftime('%Y-%m-%dT%H:%M'),
+            'start': now.strftime('%Y-%m-%d'),
+            'end': (now + timedelta(days=1, hours=1)).strftime('%Y-%m-%d'),
             'filter': json.dumps({"PriceArea": [price_area]})
         }
         
