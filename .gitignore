@@ -6,5 +6,8 @@ dist/
 wheels/
 *.egg-info
 
+# Dev environment
+.vscode
+
 # Virtual environments
 .venv

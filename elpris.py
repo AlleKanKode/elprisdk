@@ -17,6 +17,11 @@ def parse_arguments():
                         help='Undlad at vise grafen interaktivt (kun gem den)')
     return parser.parse_args()
 
+def round_down_to_hour(dt: datetime) -> datetime:
+    """Runder et datetime-objekt ned til den nærmeste hele time."""
+    return dt.replace(minute=0, second=0, microsecond=0)
+
+
 def hent_stroem_priser(region):
     """Henter strømpriser fra Energinet API og beregner slutpriser med afgifter."""
     # Konverter region til korrekt format for API
@@ -40,7 +45,8 @@ def hent_stroem_priser(region):
                 
             # Konvertér til pandas DataFrame for nemmere databehandling
             df = pd.DataFrame(data)
-            df['HourDK'] = pd.to_datetime(df['HourDK'])
+            #df['HourDK'] = pd.to_datetime(df['HourDK'])
+            df['HourDK'] = pd.to_datetime(df['HourDK'], utc=True).dt.tz_convert('Europe/Copenhagen')
             
             # Konvertér øre/kWh til kr/kWh (SpotPriceDKK er i kr/MWh)
             df['SpotPriceDKK_kWh'] = df['SpotPriceDKK'] / 1000
@@ -61,6 +67,8 @@ def hent_stroem_priser(region):
     except Exception as e:
         print(f"Der opstod en fejl: {e}")
         return None
+    
+
 
 def vis_aktuel_pris_og_graf(region, output_filename, show_plot=True):
     """Viser den aktuelle strømpris og en graf over dagens priser."""
@@ -74,8 +82,15 @@ def vis_aktuel_pris_og_graf(region, output_filename, show_plot=True):
     
     # Find nuværende time
     nu = datetime.now(pytz.timezone('Europe/Copenhagen'))
-    aktuel_time = nu.replace(minute=0, second=0, microsecond=0)
+    #aktuel_time = nu.replace(minute=0, second=0, microsecond=0)
+
+    # Vi laver aktuel time om til en Pandas timestamp da det er den der slås op med i dataframen nedenfor. 
+    aktuel_time_dt = round_down_to_hour(nu)
+    aktuel_time = pd.Timestamp(aktuel_time_dt) 
     
+    print (aktuel_time)
+    print (df['HourDK'] == aktuel_time)
+
     # Find den aktuelle pris
     aktuel_pris_række = df[df['HourDK'] == aktuel_time]
     if not aktuel_pris_række.empty:
