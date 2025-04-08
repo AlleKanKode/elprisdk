@@ -6,6 +6,64 @@ import pandas as pd
 import matplotlib.dates as mdates
 import argparse
 
+class TaxAndFees:
+    """
+    A class to encapsulate electricity taxes and fees.
+    """
+
+    def __init__(self, moms_rate=0.25, elafgift=0.699, systemtarif=0.054, nettarif=0.213):
+        """
+        Initializes the TaxAndFees object with the given tax and fee rates.
+
+        Args:
+            moms_rate (float): The VAT rate (default: 0.25).
+            elafgift (float): The electricity tax rate in kr/kWh (default: 0.699).
+            systemtarif (float): The system tariff rate in kr/kWh (default: 0.054).
+            nettarif (float): The network tariff rate in kr/kWh (default: 0.213).
+        """
+        self._moms_rate = moms_rate
+        self._elafgift = elafgift
+        self._systemtarif = systemtarif
+        self._nettarif = nettarif
+
+    def get_moms_rate(self):
+        """
+        Returns the VAT rate.
+
+        Returns:
+            float: The VAT rate.
+        """
+        return self._moms_rate
+
+    def get_elafgift(self):
+        """
+        Returns the electricity tax rate.
+
+        Returns:
+            float: The electricity tax rate in kr/kWh.
+        """
+        return self._elafgift
+
+    def get_systemtarif(self):
+        """
+        Returns the system tariff rate.
+
+        Returns:
+            float: The system tariff rate in kr/kWh.
+        """
+        return self._systemtarif
+
+    def get_nettarif(self):
+        """
+        Returns the network tariff rate.
+
+        Returns:
+            float: The network tariff rate in kr/kWh.
+        """
+        return self._nettarif
+
+
+
 def parse_arguments():
     """Håndterer kommandolinjeargumenter."""
     parser = argparse.ArgumentParser(description='Hent og vis strømpriser for Danmark.')
@@ -53,12 +111,13 @@ def hent_stroem_priser(region):
             
             # Tilføj afgifter (dette er eksempelværdier - brug aktuelle satser)
             moms_rate = 0.25  # 25% moms
-            elafgift = 0.699  # kr/kWh (eksempelværdi)
-            systemtarif = 0.054  # kr/kWh (eksempelværdi)
-            nettarif = 0.213  # kr/kWh (eksempelværdi)
+            elafgift = 0.72  # kr/kWh (eksempelværdi)
+            systemtarif = 0.050  # kr/kWh (eksempelværdi)
+            nettarif = 0.43  # kr/kWh (eksempelværdi)
+            transmis_tarif = 0.07 # Har vi fundet ud af vi app
             
             # Beregn total pris inklusive afgifter
-            df['TotalPris'] = df['SpotPriceDKK_kWh'] + elafgift + systemtarif + nettarif
+            df['TotalPris'] = df['SpotPriceDKK_kWh'] + elafgift + systemtarif + nettarif + transmis_tarif
             df['TotalPrisMedMoms'] = df['TotalPris'] * (1 + moms_rate)
             
             return df
