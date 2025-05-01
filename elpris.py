@@ -6,12 +6,22 @@ import pandas as pd
 import matplotlib.dates as mdates
 import argparse
 
+'''
+# Tilføj afgifter (dette er eksempelværdier - brug aktuelle satser)
+            moms_rate = 0.25  # 25% moms
+            elafgift = 0.72  # kr/kWh (eksempelværdi)
+            systemtarif = 0.050  # kr/kWh (eksempelværdi)
+            nettarif = 0.43  # kr/kWh (eksempelværdi)
+            transmis_tarif = 0.07 # Har vi fundet ud af vi app
+'''
+
+
 class TaxAndFees:
     """
     A class to encapsulate electricity taxes and fees.
     """
 
-    def __init__(self, moms_rate=0.25, elafgift=0.699, systemtarif=0.054, nettarif=0.213):
+    def __init__(self, moms_rate=0.25, elafgift=0.699, systemtarif=0.054, nettarif=0.213, trans_tarif=0.07):
         """
         Initializes the TaxAndFees object with the given tax and fee rates.
 
@@ -25,6 +35,7 @@ class TaxAndFees:
         self._elafgift = elafgift
         self._systemtarif = systemtarif
         self._nettarif = nettarif
+        self._trans_tarif = trans_tarif
 
     def get_moms_rate(self):
         """
@@ -42,7 +53,7 @@ class TaxAndFees:
         Returns:
             float: The electricity tax rate in kr/kWh.
         """
-        return self._elafgift
+        return self._elafgift * 2
 
     def get_systemtarif(self):
         """
@@ -61,8 +72,32 @@ class TaxAndFees:
             float: The network tariff rate in kr/kWh.
         """
         return self._nettarif
+    
+    def get_transmis_tarif(self):
+        """
+        Returns the transmision tariff rate.
 
+        Returns:
+            float: The network transmission tariff rate in kr/kWh.
+        """
+        return self._trans_tarif
 
+    def add_tarrifs(self, charge : float) -> float:
+        """_summary_
+
+        Args:
+            charge (float): _description_
+
+        Returns:
+            float: _description_
+        """
+        return charge + self._elafgift + self._systemtarif + self._nettarif + self._trans_tarif
+
+    def add_taxes(self, carge_ex_tax) -> float:
+
+        return carge_ex_tax * (1 + self._moms_rate)
+    
+    
 
 def parse_arguments():
     """Håndterer kommandolinjeargumenter."""
@@ -79,11 +114,12 @@ def round_down_to_hour(dt: datetime) -> datetime:
     """Runder et datetime-objekt ned til den nærmeste hele time."""
     return dt.replace(minute=0, second=0, microsecond=0)
 
-
 def hent_stroem_priser(region):
     """Henter strømpriser fra Energinet API og beregner slutpriser med afgifter."""
     # Konverter region til korrekt format for API
     price_area = region.upper()
+
+    tariffs = TaxAndFees()   
     
     try:
         # API-kald til Energinet
@@ -109,16 +145,11 @@ def hent_stroem_priser(region):
             # Konvertér øre/kWh til kr/kWh (SpotPriceDKK er i kr/MWh)
             df['SpotPriceDKK_kWh'] = df['SpotPriceDKK'] / 1000
             
-            # Tilføj afgifter (dette er eksempelværdier - brug aktuelle satser)
-            moms_rate = 0.25  # 25% moms
-            elafgift = 0.72  # kr/kWh (eksempelværdi)
-            systemtarif = 0.050  # kr/kWh (eksempelværdi)
-            nettarif = 0.43  # kr/kWh (eksempelværdi)
-            transmis_tarif = 0.07 # Har vi fundet ud af vi app
-            
-            # Beregn total pris inklusive afgifter
-            df['TotalPris'] = df['SpotPriceDKK_kWh'] + elafgift + systemtarif + nettarif + transmis_tarif
-            df['TotalPrisMedMoms'] = df['TotalPris'] * (1 + moms_rate)
+            # # Beregn total pris inklusive afgifter
+            # df['TotalPris'] = df['SpotPriceDKK_kWh'] + elafgift + systemtarif + nettarif + transmis_tarif
+            df['TotalPris'] = tariffs.add_tarrifs(df['SpotPriceDKK_kWh'])
+            # df['TotalPrisMedMoms'] = df['TotalPris'] * (1 + moms_rate)
+            df['TotalPrisMedMoms'] = tariffs.add_taxes(df['TotalPris'])
             
             return df
         else:
@@ -126,8 +157,6 @@ def hent_stroem_priser(region):
     except Exception as e:
         print(f"Der opstod en fejl: {e}")
         return None
-    
-
 
 def vis_aktuel_pris_og_graf(region, output_filename, show_plot=True):
     """Viser den aktuelle strømpris og en graf over dagens priser."""
