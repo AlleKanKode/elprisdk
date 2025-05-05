@@ -15,7 +15,6 @@ import argparse
             transmis_tarif = 0.07 # Har vi fundet ud af vi app
 '''
 
-
 class TaxAndFees:
     """
     A class to encapsulate electricity taxes and fees.
@@ -110,11 +109,20 @@ def parse_arguments():
                         help='Undlad at vise grafen interaktivt (kun gem den)')
     return parser.parse_args()
 
-def round_down_to_hour(dt: datetime) -> datetime:
-    """Runder et datetime-objekt ned til den nærmeste hele time."""
+def round_down_to_hour(dt: datetime) -> datetime:    
+    """
+    Denne funktion runder et datetime-objekt ned til den nærmeste hele time
+
+
+    Args:
+        dt (datetime): The datetime object to round down.
+
+    Returns:
+        datetime: A new datetime object rounded down to the nearest hour.
+    """
     return dt.replace(minute=0, second=0, microsecond=0)
 
-def hent_stroem_priser(region):
+def hent_stroem_priser(region : str):
     """Henter strømpriser fra Energinet API og beregner slutpriser med afgifter."""
     # Konverter region til korrekt format for API
     price_area = region.upper()
@@ -217,6 +225,7 @@ def vis_aktuel_pris_og_graf(region, output_filename, show_plot=True):
     # Vis grafen hvis ønsket
     if show_plot:
         plt.show()
+
 
 if __name__ == "__main__":
     args = parse_arguments()
