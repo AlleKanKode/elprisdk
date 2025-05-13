@@ -81,11 +81,12 @@ class TaxAndFees:
         """
         return self._trans_tarif
 
-    def add_tarrifs(self, charge : float) -> float:
+    def add_tarrifs(self, charge : float, charge_time : pd.Timestamp) -> float:
         """_summary_
 
         Args:
             charge (float): _description_
+            charge_time (pd.Timestamp): _description_
 
         Returns:
             float: _description_
