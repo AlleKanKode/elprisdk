@@ -63,14 +63,36 @@ class TaxAndFees:
         """
         return self._systemtarif
 
-    def get_nettarif(self):
+    def get_nettarif(self, charge_time: pd.Timestamp = None):
         """
-        Returns the network tariff rate.
+        Returns the network tariff rate in øre/kWh based on month and hour.
+        """
+        if charge_time is None:
+            return self._nettarif  # fallback
 
-        Returns:
-            float: The network tariff rate in kr/kWh.
-        """
-        return self._nettarif
+        # Define winter months (October to March)
+        winter_months = [10, 11, 12, 1, 2, 3]
+
+        if charge_time.month in winter_months:
+            # Winter tariffs (in øre/kWh)
+            low_hour_tariff = 5.17
+            high_hour_tariff = 15.50
+            peak_hour_tariff = 46.49
+        else:
+            # Summer tariffs (in øre/kWh)
+            low_hour_tariff = 5.17
+            high_hour_tariff = 7.74
+            peak_hour_tariff = 20.14
+
+        # Define hour ranges
+        hour = charge_time.hour
+        
+        if 17 <= hour <= 21:
+            return peak_hour_tariff / 100  # convert to kr/kWh
+        elif (6 <= hour < 17) or (21 < hour <= 23):
+            return high_hour_tariff / 100
+        else:
+            return low_hour_tariff / 100
     
     def get_transmis_tarif(self):
         """
