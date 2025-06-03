@@ -73,6 +73,12 @@ class TaxAndFees:
         # Define winter months (October to March)
         winter_months = [10, 11, 12, 1, 2, 3]
 
+        # Det kan være en god ide selv at definere variablerne
+        # så vi får hjælp af kode værktøjet 
+        low_hour_tariff : float = 0.0
+        high_hour_tariff : float = 0.0
+        peak_hour_tariff : float = 0.0
+
         if charge_time.month in winter_months:
             # Winter tariffs (in øre/kWh)
             low_hour_tariff = 5.17
