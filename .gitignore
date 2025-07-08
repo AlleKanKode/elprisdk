@@ -11,3 +11,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Ignore database file
+*.db
