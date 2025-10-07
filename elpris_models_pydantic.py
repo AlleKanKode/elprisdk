@@ -1,20 +1,4 @@
-from pydantic import BaseModel, Field
-from datetime import datetime
-from typing import List
-import json
-
-# Dette er en Pydantic-version af elpris_models.py.
-# Hovedforskellen er, at Pydantic ikke kun er en datastruktur,
-# men også et validerings- og parsing-bibliotek.
-#
-# Fordele ved Pydantic her:
-# - Automatisk type-konvertering: Strengen "2025-08-18T22:00:00" bliver automatisk
-#   konverteret til et datetime-objekt uden behov for en helper-funktion.
-# - Indbygget serialisering/deserialisering: .dict() og .json() metoder er standard.
-#   Man behøver ikke skrive to_dict() eller from_dict() manuelt.
-# - Robust fejlhåndtering: Hvis data ikke matcher modellen, får man en klar
-#   ValidationError.
-
+print(deserialiseret_data)
 
 class ElspotRecord(BaseModel):
     """
