@@ -1,7 +1,7 @@
 [project]
-name = "elprisdk"
+name = "elpris"
 version = "0.1.0"
-description = "Add your description here"
+description = "Simpel Python kode der kan fortælle os hvad prisen er på strøm i Danmark lige nu, samt give os en graf over elprisens udvikling"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -18,4 +18,14 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ipykernel>=6.29.5",
+    "marimo>=0.17.8",
+    "pytest>=8.4.2",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["elpris"]
+exclude = ["tests*", "temp*"]

@@ -22,11 +22,11 @@ class PriceArea(StrEnum):
 
 
 class Energinet(BaseModel):
-    str : url = "https://api.energidataservice.dk/dataset/Elspotprices"
-    datetime : start
-    datetime : end
-    PriceArea : price_area
-    str : sort
+    url : str = "https://api.energidataservice.dk/dataset/Elspotprices"
+    start : datetime
+    end : datetime
+    price_area : PriceArea
+    sort : str
 
     @field_serializer('start')
     def serialize_from_date_time(self, from_dt : datetime) -> str:
