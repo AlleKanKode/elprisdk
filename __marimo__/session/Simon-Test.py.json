@@ -1,0 +1,59 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.17.8"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "TmLv",
+      "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "HFJA",
+      "code_hash": "c37542ed816a944575390bbaab082b5f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"demo-af-dark-mode\">Demo af Dark Mode</h1>\n<span class=\"paragraph\">F\u00f8lgende skal inds\u00e6ttes f\u00f8rst i ens Marimo Notebook: </span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "xSzn",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Rsci",
+      "code_hash": "e40845e9d75cd62ba31920f710592848",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"kilde\"><a href=\"https://docs.marimo.io/guides/configuration/theming/#forcing-dark-mode\" rel=\"noopener\" target=\"_blank\">Kilde</a></h2></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
