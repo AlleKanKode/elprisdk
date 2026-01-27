@@ -30,6 +30,8 @@ def vis_aktuel_pris_og_graf(region, output_filename, show_plot=True):
     
     # Find nuværende time
     nu = datetime.now(pytz.timezone('Europe/Copenhagen'))
+    if nu.year == 2026:
+        nu = nu.replace(year=2025)
     #aktuel_time = nu.replace(minute=0, second=0, microsecond=0)
 
     # Vi laver aktuel time om til en Pandas timestamp da det er den der slås op med i dataframen nedenfor. 

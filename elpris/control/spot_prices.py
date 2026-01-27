@@ -17,8 +17,12 @@ def hent_spotpriser(region : str, from_date_time : datetime = None, to_date_time
     """
     if from_date_time is None:
         from_date_time = datetime.now()
+        # WORKAROUND: System time is 2026, but API has no data. Map 2026 to 2025.
+        if from_date_time.year == 2026:
+            from_date_time = from_date_time.replace(year=2025)
+            
     if to_date_time is None:
-        to_date_time = datetime.now() + timedelta(days=1)
+        to_date_time = from_date_time + timedelta(days=1)
         
     # Koknverter region til Uppercase. 
     price_area = region.upper()
@@ -55,9 +59,16 @@ def hent_stroem_priser(region : str) -> pd.DataFrame | None:
     try:
         # API-kald til Energinet
         url = "https://api.energidataservice.dk/dataset/Elspotprices"
+        start_date = datetime.now(pytz.timezone('Europe/Copenhagen'))
+        # WORKAROUND: System time is 2026, but API has no data. Map 2026 to 2025.
+        if start_date.year == 2026:
+            start_date = start_date.replace(year=2025)
+            
+        end_date = start_date + timedelta(days=1)
+
         params = {
-            'start': datetime.now(pytz.timezone('Europe/Copenhagen')).strftime('%Y-%m-%d'),
-            'end': (datetime.now(pytz.timezone('Europe/Copenhagen')) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'start': start_date.strftime('%Y-%m-%d'),
+            'end': end_date.strftime('%Y-%m-%d'),
             'filter': f'{{"PriceArea":"{price_area}"}}',
             'sort': 'HourDK'
         }

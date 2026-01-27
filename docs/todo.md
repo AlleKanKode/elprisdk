@@ -1,0 +1,8 @@
+- Der er hardcodet data for strømpriserne
+- Der er hardcodet årstal til håndtering af 2026 / 2025 hvilket er en midlertidig løsning
+- Datamodellerne
+- Integrationen med Energinet API
+- UI
+- Tests
+- Validering af kode struktur
+- Fast API.
