@@ -4,10 +4,9 @@
 Refactor the current `elpris` project to comply with workspace rules (`.agents/rules/basic-rules.md` and `.agents/rules/structure.md`). This involves restructuring the file organization, splitting the monolithic `elpris.py` into a proper package structure (Models-View-Control), and ensuring the root directory contains only `main.py` as a Python entry point.
 
 ## User Review Required
-> [!WARNING]
-> The workspace rules state "Project code must be placed under **blackstat** package folder".
-> Currently, the package is named `elpris`. To avoid massive renaming and confusing the current setup (`pyproject.toml`, directory names), I will keep the package as `elpris` for now properly structured.
-> **If you strictly require the folder to be named `blackstat`, please let me know.** Otherwise, I will proceed with `elpris` as the package name.
+> [!NOTE]
+> The workspace rules now align with the project structure (`elpris` package), so no renaming of the package is required.
+> Strict usage of `uv` for dependency management will be enforced.
 
 ## Proposed Changes
 
@@ -45,8 +44,8 @@ Refactor the current `elpris` project to comply with workspace rules (`.agents/r
 
 ### Automated Tests
 - Create a new test `tests/test_taxes.py` to verify `TaxAndFees` logic works after moving.
-- Run `pytest` to ensure no import errors and logic holds.
+- Run `uv run pytest` to ensure no import errors and logic holds.
 
 ### Manual Verification
-- Run `uv run main.py --no-show` (or just `python main.py --no-show`) to verify the CLI works and generates the graph image without errors.
+- Run `uv run main.py --no-show` to verify the CLI works and generates the graph image without errors.
 - Verify `docs/` and `data/` folders exist.

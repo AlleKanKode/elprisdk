@@ -1,7 +1,8 @@
+from __future__ import annotations
 from datetime import date, datetime
 from enum import StrEnum
-from pydantic import BaseModel
 from tzlocal import get_localzone
+from pydantic import BaseModel, field_serializer
 
 class PriceArea(StrEnum):
     DK1 = "DK1"
