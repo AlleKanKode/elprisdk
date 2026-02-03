@@ -2,11 +2,8 @@ from datetime import datetime
 from typing import List
 from enum import Enum
 from pydantic import BaseModel
+from elpris.models.enums.price_area import PriceArea
 
-# How her har vi en enum agtig ting.... Det har vi ikke talt om før vedr Python.... Terminator altså
-class PriceArea(str, Enum):
-    DK1 = "DK1"
-    DK2 = "DK2"
 
 class ElspotRecord(BaseModel):
     """

@@ -3,23 +3,21 @@ from datetime import date, datetime
 from enum import StrEnum
 from tzlocal import get_localzone
 from pydantic import BaseModel, field_serializer
+from elpris.models.enums.price_area import PriceArea
 
-class PriceArea(StrEnum):
-    DK1 = "DK1"
-    DK2 = "DK2"
   
     
-    """
+"""
     
     
-        params = {
-            'start': datetime.now(pytz.timezone('Europe/Copenhagen')).strftime('%Y-%m-%d'),
-            'end': (datetime.now(pytz.timezone('Europe/Copenhagen')) + timedelta(days=1)).strftime('%Y-%m-%d'),
-            'filter': f'{{"PriceArea":"{price_area}"}}',
-            'sort': 'HourDK'
-        }
-    
-    """
+    params = {
+        'start': datetime.now(pytz.timezone('Europe/Copenhagen')).strftime('%Y-%m-%d'),
+        'end': (datetime.now(pytz.timezone('Europe/Copenhagen')) + timedelta(days=1)).strftime('%Y-%m-%d'),
+        'filter': f'{{"PriceArea":"{price_area}"}}',
+        'sort': 'HourDK'
+    }
+
+"""
 
 
 class Energinet(BaseModel):
