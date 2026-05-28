@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "plan": {
+      "model": "opencode-go/minimax-m2.7",
+      "temperature": 0.2
+    },
+    "build": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "temperature": 0
+    }
+  }
+}
