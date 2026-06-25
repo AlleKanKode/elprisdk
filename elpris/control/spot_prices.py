@@ -1,10 +1,11 @@
 import requests
-import pandas as pd
 from datetime import datetime, timedelta
 import pytz
-from elpris.control.calculations import apply_taxes
+from elpris.control.calculations import beregn_totalpris
+from elpris.models.elpris_models import ElspotResponse
 
-def hent_spotpriser(region : str, from_date_time : datetime = None, to_date_time : datetime = None) -> requests.Response | None:
+
+def hent_spotpriser(region: str, from_date_time: datetime = None, to_date_time: datetime = None) -> requests.Response | None:
     """Henter strømpriser i en given periode for en given region. Perioden er i UTC tid for nu
 
     Args:
@@ -51,42 +52,23 @@ def hent_spotpriser(region : str, from_date_time : datetime = None, to_date_time
         print(f"Der opstod en fejl: {e}")
         return None
 
-def hent_stroem_priser(region : str) -> pd.DataFrame | None:
+def hent_stroem_priser(region: str) -> list[dict] | None:
     """Henter strømpriser fra Energinet API og beregner slutpriser med afgifter."""
-    # Konverter region til korrekt format for API
-    price_area = region.upper()
-    
     try:
-        # API-kald til Energinet
-        url = "https://api.energidataservice.dk/dataset/Elspotprices"
-        start_date = datetime.now(pytz.timezone('Europe/Copenhagen'))
-        # WORKAROUND: System time is 2026, but API has no data. Map 2026 to 2025.
-        if start_date.year == 2026:
-            start_date = start_date.replace(year=2025)
-            
-        end_date = start_date + timedelta(days=1)
+        response = hent_spotpriser(region)
+        if response is None:
+            return None
 
-        params = {
-            'start': start_date.strftime('%Y-%m-%d'),
-            'end': end_date.strftime('%Y-%m-%d'),
-            'filter': f'{{"PriceArea":"{price_area}"}}',
-            'sort': 'HourDK'
-        }
-        response = requests.get(url, params=params)
-        
-        if response.status_code == 200:
-            data = response.json().get('records', [])
-            if not data:
-                raise ValueError(f"Ingen prisdata modtaget fra API'et for region {region}")
-                
-            # Konvertér til pandas DataFrame for nemmere databehandling
-            df = pd.DataFrame(data)
-            
-            df = apply_taxes(df)
+        json_data = response.json()
+        elspot_response = ElspotResponse(**json_data)
 
-            return df
-        else:
-            raise Exception(f"Fejl ved hentning af data: {response.status_code}")
+        resultater = []
+        for record in elspot_response.records:
+            pris_data = beregn_totalpris(record.SpotPriceDKK, record.HourDK)
+            pris_data["price_area"] = record.PriceArea
+            resultater.append(pris_data)
+
+        return resultater
     except Exception as e:
         print(f"Der opstod en fejl: {e}")
         return None

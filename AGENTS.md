@@ -14,10 +14,12 @@
 - Produktionskode hører under `elpris/`.
 - Tests hører under `tests/`.
 - Root-level Python entrypoint skal være `main.py`; repo-reglerne forventer, at det er den eneste Python-fil i roden til opstart.
+- `scripts/` indeholder hjælpescripts (ikke en del af pakken).
+- `data/` indeholder reference/testdata (JSON-filer fra Energinet).
 - Den faktiske lagdeling er:
   - `elpris/view/cli.py`: CLI-argumenter og plotting
-  - `elpris/control/spot_prices.py`: hentning fra Energidataservice
-  - `elpris/control/calculations.py`: afrunding og afgiftsberegning
+  - `elpris/control/spot_prices.py`: hentning fra Energidataservice (bruger Pydantic `ElspotResponse`)
+  - `elpris/control/calculations.py`: `beregn_totalpris()` (enkelte poster) + `round_down_to_hour()`
   - `elpris/models/`: Pydantic-, enum- og afgiftsmodeller
 
 ## Repo Quirks
@@ -28,5 +30,5 @@
 - Der er en DuckDB dependency og en repo-regel om data i `data/`, men den nuværende hovedapp bruger live API-kald og plotting; DuckDB-flowet lever i scratch-kode under `temp/`.
 
 ## Tests
-- Testdakningen er lille. `tests/test_taxes.py` er den eneste test med reelle assertions.
+- Testdakningen er vokset. `tests/test_taxes.py` har 12 tests med reelle assertions, inkl. dynamisk nettarif (vinter/sommer, peak/høj/lav) og `beregn_totalpris()`.
 - `tests/test_models_energinet.py` er i praksis tom, så et grønt test-run er ikke stærk evidens for korrekthed.
