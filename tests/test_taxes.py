@@ -4,7 +4,7 @@ from elpris.models.taxes import TaxAndFees
 def test_tax_and_fees_default_values():
     tariffs = TaxAndFees()
     assert tariffs.get_moms_rate() == 0.25
-    assert tariffs.get_elafgift() == 0.699 * 2
+    assert tariffs.get_elafgift() == 0.699
     assert tariffs.get_systemtarif() == 0.054
     assert tariffs.get_transmis_tarif() == 0.07
 

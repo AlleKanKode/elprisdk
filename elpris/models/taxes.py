@@ -37,7 +37,7 @@ class TaxAndFees:
         Returns:
             float: The electricity tax rate in kr/kWh.
         """
-        return self._elafgift * 2
+        return self._elafgift
 
     def get_systemtarif(self):
         """
@@ -112,8 +112,8 @@ class TaxAndFees:
         # return charge + self._elafgift + self._systemtarif + self._nettarif + self._trans_tarif
         # It used self._nettarif which is the default/fallback. 
         # To match original exactly:
-        return charge + self._elafgift + self._systemtarif + self._nettarif + self._trans_tarif
+        return charge + self.get_elafgift() + self.get_systemtarif() + self._nettarif + self.get_transmis_tarif()
 
-    def add_taxes(self, carge_ex_tax) -> float:
+    def add_taxes(self, charge_ex_tax) -> float:
 
-        return carge_ex_tax * (1 + self._moms_rate)
+        return charge_ex_tax * (1 + self._moms_rate)
