@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime
 from elpris.models.taxes import TaxAndFees
-from elpris.control.calculations import beregn_totalpris
+from elpris.control.calculations import beregn_totalpris, juster_aar
 
 def test_tax_and_fees_default_values():
     tariffs = TaxAndFees()
@@ -107,3 +107,18 @@ def test_beregn_totalpris_negativ_spot():
     assert result["spotpris_kwh"] == pytest.approx(-0.1)
     # Total kan stadig være positiv pga. afgifter
     assert result["total_med_moms"] > 0
+
+
+def test_juster_aar_2026_til_2025():
+    t = datetime(2026, 7, 1, 12, 0, 0)
+    assert juster_aar(t).year == 2025
+
+
+def test_juster_aar_2025_uendret():
+    t = datetime(2025, 7, 1, 12, 0, 0)
+    assert juster_aar(t).year == 2025
+
+
+def test_juster_aar_andet_aar_uendret():
+    t = datetime(2024, 6, 15, 8, 0, 0)
+    assert juster_aar(t) == t

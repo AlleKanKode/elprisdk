@@ -4,7 +4,7 @@ import pytz
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from elpris.control.calculations import round_down_to_hour
+from elpris.control.calculations import round_down_to_hour, juster_aar
 from elpris.control.spot_prices import hent_stroem_priser
 
 def parse_arguments():
@@ -31,9 +31,7 @@ def vis_aktuel_pris_og_graf(region, output_filename, show_plot=True):
     df = pd.DataFrame(resultater)
 
     # Find nuværende time
-    nu = datetime.now(pytz.timezone('Europe/Copenhagen'))
-    if nu.year == 2026:
-        nu = nu.replace(year=2025)
+    nu = juster_aar(datetime.now(pytz.timezone('Europe/Copenhagen')))
 
     aktuel_time_dt = round_down_to_hour(nu)
     aktuel_time = aktuel_time_dt

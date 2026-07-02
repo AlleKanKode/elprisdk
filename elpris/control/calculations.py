@@ -2,6 +2,13 @@ from datetime import datetime
 from elpris.models.taxes import TaxAndFees
 
 
+def juster_aar(dt: datetime) -> datetime:
+    """Workaround: system clock er i 2026, men Energinet har kun data til 2025."""
+    if dt.year == 2026:
+        return dt.replace(year=2025)
+    return dt
+
+
 def round_down_to_hour(dt: datetime) -> datetime:
     return dt.replace(minute=0, second=0, microsecond=0)
 

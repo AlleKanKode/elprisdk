@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime, timedelta
 import pytz
-from elpris.control.calculations import beregn_totalpris
+from elpris.control.calculations import beregn_totalpris, juster_aar
 from elpris.models.elpris_models import ElspotResponse
 
 
@@ -17,10 +17,7 @@ def hent_spotpriser(region: str, from_date_time: datetime = None, to_date_time: 
         Response: Et Request response objekt
     """
     if from_date_time is None:
-        from_date_time = datetime.now()
-        # WORKAROUND: System time is 2026, but API has no data. Map 2026 to 2025.
-        if from_date_time.year == 2026:
-            from_date_time = from_date_time.replace(year=2025)
+        from_date_time = juster_aar(datetime.now())
             
     if to_date_time is None:
         to_date_time = from_date_time + timedelta(days=1)

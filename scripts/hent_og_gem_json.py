@@ -8,6 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from elpris.control.spot_prices import hent_spotpriser
+from elpris.control.calculations import juster_aar
 
 def main():
     parser = argparse.ArgumentParser(
@@ -30,9 +31,7 @@ def main():
     if args.date:
         from_date = datetime.strptime(args.date, "%Y-%m-%d")
     else:
-        from_date = datetime.now() - timedelta(days=1)
-        if from_date.year == 2026:
-            from_date = from_date.replace(year=2025)
+        from_date = juster_aar(datetime.now() - timedelta(days=1))
 
     to_date = from_date + timedelta(days=1)
     output = args.output or f"data/elspot_{args.region}.json"

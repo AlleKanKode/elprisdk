@@ -23,7 +23,7 @@
   - `elpris/models/`: Pydantic-, enum- og afgiftsmodeller
 
 ## Repo Quirks
-- Dato-logikken har en bevidst `2026 -> 2025` workaround i bade `elpris/view/cli.py` og `elpris/control/spot_prices.py`, fordi miljoets systemtid ligger foran tilgængelige Energidataservice-data. Bevar eller erstat den bevidst, hvis du rører dato-handteringen.
+- Dato-logikken har en bevidst `2026 -> 2025` workaround i `elpris/control/calculations.py:juster_aar()`, fordi miljoets systemtid ligger foran tilgængelige Energidataservice-data. Bevar eller erstat den bevidst, hvis du rører dato-handteringen.
 - Bevar danske domanenavne og brugerrettede tekster, medmindre opgaven eksplicit er at oversatte dem.
 - `temp/` indeholder scratch/prototype-kode og er ikke en del af den pakkede applikation (`pyproject.toml` udelukker `temp*`).
 - `elpris/notebooks/` og `__marimo__/` bruges til Marimo-notebooks, men er ikke hoved-entrypoint for appen.
