@@ -16,14 +16,16 @@ def parse_arguments():
                         help='Filnavn for den gemte graf')
     parser.add_argument('--no-show', action='store_true',
                         help='Undlad at vise grafen interaktivt (kun gem den)')
+    parser.add_argument('--store', action='store_true',
+                        help='Gem rådata i DuckDB-databasen')
     return parser.parse_args()
 
-def vis_aktuel_pris_og_graf(region, output_filename, show_plot=True):
+def vis_aktuel_pris_og_graf(region, output_filename, show_plot=True, store=False):
     """Viser den aktuelle strømpris og en graf over dagens priser."""
     region_names = {'dk1': 'Vestdanmark', 'dk2': 'Østdanmark'}
     region_name = region_names.get(region.lower(), region)
 
-    resultater = hent_stroem_priser(region)
+    resultater = hent_stroem_priser(region, store=store)
 
     if resultater is None:
         return

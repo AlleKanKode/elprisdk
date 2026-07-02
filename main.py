@@ -5,5 +5,6 @@ if __name__ == "__main__":
     vis_aktuel_pris_og_graf(
         region=args.region, 
         output_filename=args.output,
-        show_plot=not args.no_show
+        show_plot=not args.no_show,
+        store=args.store
     )

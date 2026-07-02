@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import pytz
 from elpris.control.calculations import beregn_totalpris, juster_aar
 from elpris.models.elpris_models import ElspotResponse
+from elpris.storage.elspot_repository import ElspotRepository
 
 
 def hent_spotpriser(region: str, from_date_time: datetime = None, to_date_time: datetime = None) -> requests.Response | None:
@@ -49,7 +50,7 @@ def hent_spotpriser(region: str, from_date_time: datetime = None, to_date_time: 
         print(f"Der opstod en fejl: {e}")
         return None
 
-def hent_stroem_priser(region: str) -> list[dict] | None:
+def hent_stroem_priser(region: str, store: bool = False) -> list[dict] | None:
     """Henter strømpriser fra Energinet API og beregner slutpriser med afgifter."""
     try:
         response = hent_spotpriser(region)
@@ -58,6 +59,11 @@ def hent_stroem_priser(region: str) -> list[dict] | None:
 
         json_data = response.json()
         elspot_response = ElspotResponse(**json_data)
+
+        if store:
+            repo = ElspotRepository()
+            n = repo.upsert_records(elspot_response.records)
+            print(f"Gemte {n} rårecords i databasen.")
 
         resultater = []
         for record in elspot_response.records:

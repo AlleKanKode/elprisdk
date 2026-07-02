@@ -1,4 +1,4 @@
-import pandas as pd
+from datetime import datetime
 
 class TaxAndFees:
     """
@@ -48,7 +48,7 @@ class TaxAndFees:
         """
         return self._systemtarif
 
-    def get_nettarif(self, charge_time: pd.Timestamp = None):
+    def get_nettarif(self, charge_time: datetime | None = None):
         """
         Returns the network tariff rate in øre/kWh based on month and hour.
         """
@@ -94,12 +94,12 @@ class TaxAndFees:
         """
         return self._trans_tarif
 
-    def add_tarrifs(self, charge : float, charge_time : pd.Timestamp = None) -> float:
+    def add_tarrifs(self, charge: float, charge_time: datetime | None = None) -> float:
         """_summary_
 
         Args:
             charge (float): _description_
-            charge_time (pd.Timestamp): _description_
+            charge_time (datetime): _description_
 
         Returns:
             float: _description_
